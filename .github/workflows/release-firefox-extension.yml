@@ -1,0 +1,115 @@
+name: Release Firefox Extension
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'manifest.json'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Node.js to run JavaScript for parsing manifest.json and zipping
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Install dependencies (e.g., for zipping)
+      - name: Install dependencies
+        run: npm install --save-dev adm-zip
+
+      # Extract version from manifest.json
+      - name: Get manifest version
+        id: get-version
+        run: |
+          VERSION=$(node -p "require('./manifest.json').version")
+          echo "MANIFEST_VERSION=$VERSION" >> $GITHUB_ENV
+
+      # Get the latest release version from GitHub
+      - name: Get latest release
+        id: latest-release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              const response = await github.rest.repos.getLatestRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo
+              });
+              return response.data.tag_name.replace('v', '');
+            } catch (error) {
+              if (error.status === 404) {
+                return ''; // No release exists
+              }
+              throw error;
+            }
+
+      # Compare versions and proceed if different or no release exists
+      - name: Check version change
+        id: check-version
+        run: |
+          LATEST_VERSION="${{ steps.latest-release.outputs.result }}"
+          MANIFEST_VERSION="${{ env.MANIFEST_VERSION }}"
+          if [ -z "$LATEST_VERSION" ] || [ "$LATEST_VERSION" != "$MANIFEST_VERSION" ]; then
+            echo "New or changed version detected: $MANIFEST_VERSION (Latest: $LATEST_VERSION)"
+            echo "VERSION_CHANGED=true" >> $GITHUB_ENV
+          else
+            echo "No version change detected: $MANIFEST_VERSION"
+            echo "VERSION_CHANGED=false" >> $GITHUB_ENV
+          fi
+
+      # Create ZIP file of the extension
+      - name: Create ZIP file
+        if: env.VERSION_CHANGED == 'true'
+        run: |
+          node -e "
+            const AdmZip = require('adm-zip');
+            const zip = new AdmZip();
+            const files = ['manifest.json', 'background.js', 'popup.html', 'icon.png'];
+            files.forEach(file => zip.addLocalFile(file));
+            zip.writeZip('sharetext-${{ env.MANIFEST_VERSION }}.zip');
+          "
+
+      # Create a new GitHub release
+      - name: Create GitHub Release
+        if: env.VERSION_CHANGED == 'true'
+        id: create-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.MANIFEST_VERSION }}
+          release_name: Release v${{ env.MANIFEST_VERSION }}
+          draft: false
+          prerelease: false
+
+      # Upload ZIP as release asset
+      - name: Upload ZIP to Release
+        if: env.VERSION_CHANGED == 'true'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: ./sharetext-${{ env.MANIFEST_VERSION }}.zip
+          asset_name: sharetext-${{ env.MANIFEST_VERSION }}.zip
+          asset_content_type: application/zip
+
+      # Upload to Firefox Add-ons Store
+      - name: Upload to Firefox Add-ons
+        if: env.VERSION_CHANGED == 'true'
+        uses: trmcnvn/firefox-addon@v1
+        with:
+          api-key: ${{ secrets.FIREFOX_API_KEY }}
+          api-secret: ${{ secrets.FIREFOX_API_SECRET }}
+          xpi-path: sharetext-${{ env.MANIFEST_VERSION }}.zip
