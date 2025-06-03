@@ -12,6 +12,9 @@
 - 🔒 Privacy-focused - all processing happens locally in your browser
 
 ## Screenshots
+![Screenshot From 2025-06-03 11-48-26](https://github.com/user-attachments/assets/8a464f5f-3ff6-4ea4-99d4-e179ffc0f100)
+![Screenshot From 2025-06-03 11-46-13](https://github.com/user-attachments/assets/01d128c7-13c5-48e6-9a6a-004a6bc95949)
+![Screenshot From 2025-06-03 11-45-06](https://github.com/user-attachments/assets/a3c704e3-4a33-4d46-a0e6-ea6a1b74582a)
 
 *QR code generation in action - right-click any selected text or link*
 
