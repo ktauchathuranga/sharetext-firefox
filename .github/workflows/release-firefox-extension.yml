@@ -118,3 +118,4 @@ jobs:
           api-key: ${{ secrets.FIREFOX_API_KEY }}
           api-secret: ${{ secrets.FIREFOX_API_SECRET }}
           xpi: sharetext-${{ env.MANIFEST_VERSION }}.zip
+          manifest: manifest.json
