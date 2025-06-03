@@ -115,8 +115,8 @@ sharetext-firefox/
 ## Browser Compatibility
 
 - ✅ **Firefox 57+** (Primary target)
-- ✅ **Firefox for Android** (with context menu support)
 - ⚠️ Chrome version available separately
+  - [Chrome web store](https://chromewebstore.google.com/detail/bkahniimimedceplohokcnajhdcoppkg?utm_source=item-share-cb)
 
 ## Troubleshooting
 
