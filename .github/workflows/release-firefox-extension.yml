@@ -14,9 +14,11 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the repository
+      # Checkout the repository with full history to access commit data
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history to access commit files
 
       # Set up Node.js to run JavaScript for parsing manifest.json and zipping
       - name: Set up Node.js
@@ -28,12 +30,15 @@ jobs:
       - name: Install dependencies
         run: npm install --save-dev adm-zip
 
-      # Extract version from manifest.json
-      - name: Get manifest version
+      # Extract version from manifest.json in the latest commit
+      - name: Get manifest version from commit
         id: get-version
         run: |
-          VERSION=$(node -p "require('./manifest.json').version")
+          # Get the manifest.json content from the latest commit
+          git show HEAD:manifest.json > temp_manifest.json
+          VERSION=$(node -p "require('./temp_manifest.json').version")
           echo "MANIFEST_VERSION=$VERSION" >> $GITHUB_ENV
+          rm temp_manifest.json
 
       # Get the latest release version from GitHub
       - name: Get latest release
