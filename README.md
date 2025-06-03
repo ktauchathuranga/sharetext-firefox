@@ -131,14 +131,6 @@ sharetext-firefox/
 - Check `manifest.json` syntax
 - Look for errors in `about:debugging`
 
-## Changelog
-
-### v0.1.0
-- Initial release
-- Basic QR code generation for text and links
-- Context menu integration
-- Firefox Manifest V2 compatibility
-
 ## License
 
 This project is open-source and available under the [MIT License](LICENSE).
@@ -147,7 +139,6 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 - 🐛 **Report bugs:** [GitHub Issues](https://github.com/ktauchathuranga/sharetext-firefox/issues)
 - 💡 **Feature requests:** [GitHub Issues](https://github.com/ktauchathuranga/sharetext-firefox/issues)
-- 📧 **Contact:** [Your email or GitHub profile]
 
 ## Related Projects
 
