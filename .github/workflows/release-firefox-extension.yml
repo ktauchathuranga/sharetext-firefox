@@ -8,7 +8,7 @@ on:
       - 'manifest.json'
 
 permissions:
-  contents: write
+  contents: write  # Grants permission to create releases and upload assets
 
 jobs:
   release:
@@ -112,4 +112,4 @@ jobs:
         with:
           api-key: ${{ secrets.FIREFOX_API_KEY }}
           api-secret: ${{ secrets.FIREFOX_API_SECRET }}
-          xpi-path: sharetext-${{ env.MANIFEST_VERSION }}.zip
+          xpi: sharetext-${{ env.MANIFEST_VERSION }}.zip
