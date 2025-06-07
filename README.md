@@ -21,7 +21,7 @@
 ## Installation
 
 ### From Firefox Add-ons (AMO)
-*Coming soon - extension under review*
+- Install directly from the [Firefox Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/sharetext/)
 
 ### Manual Installation (For Development/Testing)
 
@@ -37,7 +37,7 @@
    - Select the `manifest.json` file from the extension folder
 
 3. **For permanent installation:**
-   - Package as `.xpi` file or wait for AMO approval
+   - Package as `.xpi` file or install from AMO
 
 ## How to Use
 
@@ -151,4 +151,4 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 **Made with ❤️ for the Firefox community**
 
-*If you find this extension useful, please consider giving it a ⭐ on GitHub!*
+*If you find this extension useful, please consider giving it a ⭐ on GitHub or leaving a review on the [Firefox Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/sharetext/)!*
