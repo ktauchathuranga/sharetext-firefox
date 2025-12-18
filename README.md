@@ -152,3 +152,5 @@ This project is open-source and available under the [MIT License](LICENSE).
 **Made with ❤️ for the Firefox community**
 
 *If you find this extension useful, please consider giving it a ⭐ on GitHub or leaving a review on the [Firefox Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/sharetext/)!*
+
+dfa2e7139d844d7f9a034c2059cf54a4
