@@ -2,14 +2,12 @@
 const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 
 browserAPI.runtime.onInstalled.addListener(() => {
-  // Context menu for selected text
   browserAPI.contextMenus.create({
     id: "generateQRText",
     title: "Share this text as QR code",
     contexts: ["selection"]
   });
 
-  // Context menu for links
   browserAPI.contextMenus.create({
     id: "generateQRLink",
     title: "Share this link as QR code",
@@ -17,24 +15,26 @@ browserAPI.runtime.onInstalled.addListener(() => {
   });
 });
 
+/**
+ * Store text in local storage and open the QR popup window.
+ * Using storage instead of URL query params avoids URL length limits
+ * that silently truncate large text selections.
+ */
+function openQRPopup(text) {
+  browserAPI.storage.local.set({ qrText: text }).then(() => {
+    browserAPI.windows.create({
+      url: browserAPI.runtime.getURL("popup.html"),
+      type: "popup",
+      width: 320,
+      height: 360
+    });
+  });
+}
+
 browserAPI.contextMenus.onClicked.addListener((info) => {
   if (info.menuItemId === "generateQRText" && info.selectionText) {
-    const popupUrl = browserAPI.runtime.getURL(`popup.html?text=${encodeURIComponent(info.selectionText)}`);
-
-    browserAPI.windows.create({
-      url: popupUrl,
-      type: "popup",
-      width: 300,
-      height: 300
-    });
+    openQRPopup(info.selectionText);
   } else if (info.menuItemId === "generateQRLink" && info.linkUrl) {
-    const popupUrl = browserAPI.runtime.getURL(`popup.html?text=${encodeURIComponent(info.linkUrl)}`);
-
-    browserAPI.windows.create({
-      url: popupUrl,
-      type: "popup",
-      width: 300,
-      height: 300
-    });
+    openQRPopup(info.linkUrl);
   }
 });

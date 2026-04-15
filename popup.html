@@ -3,25 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code</title>
-  <script src="libs/qrcode.js"></script>
+  <title>ShareText — QR Code</title>
+  <script src="libs/qrcode.min.js"></script>
   <style>
     body {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #fafafa;
     }
     #qrcode {
       width: 250px;
       height: 250px;
     }
+    #error {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      max-width: 260px;
+      padding: 16px 20px;
+      text-align: center;
+      color: #b91c1c;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
   </style>
 </head>
 <body>
   <div id="qrcode"></div>
+  <div id="error"></div>
   <script src="popup.js"></script>
 </body>
 </html>
